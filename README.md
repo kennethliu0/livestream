@@ -1,33 +1,74 @@
-# `Turborepo` Vite starter
+# Livestream
 
-This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
+An AI-powered interactive livestream app. Viewers send chat messages that are summarized by an LLM every 10 seconds, and the resulting prompt drives a real-time AI video stream powered by [Odyssey](https://odyssey.ml).
+Project submission for Team 16 in [Oddysey 2 Pro Hackathon](https://luma.com/xt4k5374).
 
-## Using this example
+## How It Works
 
-Run the following command:
-
-```sh
-npx create-turbo@latest -e with-vite
+```
+User sends chat message
+  → Server buffers messages
+  → Every 10s: Fireworks AI summarizes the chat into a scene prompt
+  → Prompt is sent to Odyssey via interact()
+  → AI video stream updates in real time
 ```
 
-## What's inside?
+The video starts with a default scene ("football touchdown at a stadium") and evolves based on what viewers type in chat.
 
-This Turborepo includes the following packages and apps:
+## Architecture
 
-### Apps and Packages
+This is a [Turborepo](https://turbo.build/repo) monorepo with:
 
-- `docs`: a vanilla [vite](https://vitejs.dev) ts app
-- `web`: another vanilla [vite](https://vitejs.dev) ts app
-- `@repo/ui`: a stub component & utility library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: shared `eslint` configurations
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+| Package | Description |
+|---------|-------------|
+| `apps/web` | React + Vite frontend — Odyssey video player + Twitch-style chat panel |
+| `apps/api` | Express + Socket.IO server — message buffering, AI summarization, tick sync |
+| `packages/types` | Shared TypeScript types (`Message`) |
+| `packages/eslint-config` | Shared ESLint configuration |
+| `packages/typescript-config` | Shared `tsconfig.json` presets |
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Prerequisites
 
-### Utilities
+- [Node.js](https://nodejs.org/) (v18+)
+- [pnpm](https://pnpm.io/) (v8+)
 
-This Turborepo has some additional tools already setup for you:
+## Setup
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+1. **Install dependencies:**
+
+   ```sh
+   pnpm install
+   ```
+
+2. **Configure environment variables:**
+
+   ```sh
+   # apps/api/.env
+   OPENAI_API_KEY=""       # Fireworks AI API key
+
+   # apps/web/.env
+   VITE_ODDYSEY_API_KEY="" # Odyssey API key
+   ```
+
+   Copy from the `.env.example` files in each app directory.
+
+3. **Start development servers:**
+
+   ```sh
+   pnpm dev
+   ```
+
+   This starts both the API server (port 3001) and the Vite dev server (port 5173).
+
+4. **Open the app:**
+
+   Visit [http://localhost:5173](http://localhost:5173)
+
+## Usage
+
+- The video stream starts automatically on page load
+- Type messages in the chat panel on the right
+- Every 10 seconds, the server summarizes recent chat messages into a prompt
+- The prompt is sent to Odyssey to update the video stream
+- A countdown bar above the chat shows time until the next summary
+- Generated prompts appear in chat as system messages (italic, with a purple left border)
