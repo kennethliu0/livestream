@@ -3,6 +3,7 @@
   "scripts": {
     "preinstall": "npx --yes only-allow pnpm",
     "build": "turbo run build",
+    "start": "turbo run start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
