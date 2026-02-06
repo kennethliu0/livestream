@@ -1,6 +1,6 @@
-# Livestream
+# Odysstream
 
-An AI-powered interactive livestream app. Viewers send chat messages that are summarized by an LLM every 10 seconds, and the resulting prompt drives a real-time AI video stream powered by [Odyssey](https://odyssey.ml).
+An AI-powered interactive livestream app. Viewers send chat messages that are summarized by an LLM every 15 seconds, and the resulting prompt drives a real-time AI video stream powered by [Odyssey](https://odyssey.ml).
 Project submission for Team 16 in [Oddysey 2 Pro Hackathon](https://luma.com/xt4k5374).
 
 ## How It Works
@@ -8,7 +8,7 @@ Project submission for Team 16 in [Oddysey 2 Pro Hackathon](https://luma.com/xt4
 ```
 User sends chat message
   → Server buffers messages
-  → Every 10s: Fireworks AI summarizes the chat into a scene prompt
+  → Every 15s: Fireworks AI summarizes the chat into a scene prompt
   → Prompt is sent to Odyssey via interact()
   → AI video stream updates in real time
 ```
