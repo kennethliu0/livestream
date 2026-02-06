@@ -15,6 +15,7 @@ function App() {
   const [messages, setMessages] = useState<ChatEntry[]>([]);
   const [input, setInput] = useState("");
   const [progress, setProgress] = useState(1);
+  const [demoRunning, setDemoRunning] = useState(false);
   const streamStartedRef = useRef(false);
   const lastGeneratedRef = useRef(Date.now());
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -48,7 +49,7 @@ function App() {
 
   // Smooth countdown — synced to server tick
   useEffect(() => {
-    const DURATION = 10000;
+    const DURATION = 15000;
     const onTick = () => {
       lastGeneratedRef.current = Date.now();
     };
@@ -80,6 +81,15 @@ function App() {
         console.error("Odyssey connect/startStream failed:", err.message);
         streamStartedRef.current = false;
       });
+  }, []);
+
+  // Listen for demo status
+  useEffect(() => {
+    const handler = (running: boolean) => setDemoRunning(running);
+    socket.on("demo-status", handler);
+    return () => {
+      socket.off("demo-status", handler);
+    };
   }, []);
 
   // Listen for chat messages
@@ -156,7 +166,7 @@ function App() {
             style={{ width: `${progress * 100}%` }}
           />
           <span className="countdown-label">
-            Next summary in {Math.ceil(progress * 10)}s
+            Next summary in {Math.ceil(progress * 15)}s
           </span>
         </div>
         <div className="chat-messages">
@@ -169,6 +179,14 @@ function App() {
           <div ref={messagesEndRef} />
         </div>
         <div className="chat-input">
+          <button
+            className={`demo-btn ${demoRunning ? "running" : ""}`}
+            onClick={() =>
+              socket.emit(demoRunning ? "stop-demo" : "start-demo")
+            }
+          >
+            {demoRunning ? "Stop Chat" : "Start Bot Chat"}
+          </button>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import type { Message } from "@repo/types";
 import { generateMessage } from "./generate";
-import { startSimulation } from "./simulate";
+import { startSimulation, stopSimulation, isDemoRunning } from "./simulate";
 
 const app = express();
 const httpServer = createServer(app);
@@ -32,10 +32,8 @@ app.get("/health", (req: Request, res: Response) => {
 // In-memory message buffer
 const messageBuffer: Message[] = [];
 
-// Every 5 seconds, emit tick and process buffered messages
+// Every 15 seconds, emit tick and process buffered messages
 setInterval(async () => {
-  io.emit("tick");
-
   if (messageBuffer.length === 0) return;
 
   const messages = messageBuffer.splice(0);
@@ -43,11 +41,13 @@ setInterval(async () => {
   try {
     const generated = await generateMessage(messages);
     io.emit("generated", generated);
+    io.emit("tick");
     console.log("generated message:", generated);
   } catch (err) {
     console.error("Failed to generate message:", err);
+    io.emit("tick");
   }
-}, 10000);
+}, 15000);
 
 // Socket.io
 io.on("connection", (socket) => {
@@ -58,6 +58,21 @@ io.on("connection", (socket) => {
     io.emit("message", message);
   });
 
+  socket.on("start-demo", () => {
+    console.log("demo started by:", socket.id);
+    startSimulation(io, messageBuffer);
+    io.emit("demo-status", true);
+  });
+
+  socket.on("stop-demo", () => {
+    console.log("demo stopped by:", socket.id);
+    stopSimulation();
+    io.emit("demo-status", false);
+  });
+
+  // Send current demo status to newly connected client
+  socket.emit("demo-status", isDemoRunning());
+
   socket.on("disconnect", () => {
     console.log("client disconnected:", socket.id);
   });
@@ -65,5 +80,4 @@ io.on("connection", (socket) => {
 
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  startSimulation(io, messageBuffer);
 });
