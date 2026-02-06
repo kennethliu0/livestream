@@ -1,4 +1,5 @@
 import { Header } from "@repo/ui/header";
+import "./socket";
 import "./style.css";
 import typescriptLogo from "/typescript.svg";
 import { Counter } from "@repo/ui/counter";

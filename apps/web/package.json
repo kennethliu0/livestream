@@ -10,7 +10,9 @@
     "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
-    "@repo/ui": "workspace:*"
+    "@repo/types": "workspace:^",
+    "@repo/ui": "workspace:*",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
