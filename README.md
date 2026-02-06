@@ -1,7 +1,7 @@
 # Odysstream
 
 An AI-powered interactive livestream app. Viewers send chat messages that are summarized by an LLM every 15 seconds, and the resulting prompt drives a real-time AI video stream powered by [Odyssey](https://odyssey.ml).<br>
-Project submission for Team 16 in [Oddysey 2 Pro Hackathon](https://luma.com/xt4k5374).
+Project submission for Team 16 in [Odyssey 2 Pro Hackathon](https://luma.com/xt4k5374).
 
 ## How It Works
 
