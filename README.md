@@ -19,13 +19,13 @@ The video starts with a default scene ("football touchdown at a stadium") and ev
 
 This is a [Turborepo](https://turbo.build/repo) monorepo with:
 
-| Package | Description |
-|---------|-------------|
-| `apps/web` | React + Vite frontend — Odyssey video player + Twitch-style chat panel |
-| `apps/api` | Express + Socket.IO server — message buffering, AI summarization, tick sync |
-| `packages/types` | Shared TypeScript types (`Message`) |
-| `packages/eslint-config` | Shared ESLint configuration |
-| `packages/typescript-config` | Shared `tsconfig.json` presets |
+| Package                      | Description                                                                 |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| `apps/web`                   | React + Vite frontend — Odyssey video player + Twitch-style chat panel      |
+| `apps/api`                   | Express + Socket.IO server — message buffering, AI summarization, tick sync |
+| `packages/types`             | Shared TypeScript types (`Message`)                                         |
+| `packages/eslint-config`     | Shared ESLint configuration                                                 |
+| `packages/typescript-config` | Shared `tsconfig.json` presets                                              |
 
 ## Prerequisites
 
@@ -47,7 +47,7 @@ This is a [Turborepo](https://turbo.build/repo) monorepo with:
    OPENAI_API_KEY=""       # Fireworks AI API key
 
    # apps/web/.env
-   VITE_ODDYSEY_API_KEY="" # Odyssey API key
+   VITE_ODYSSEY_API_KEY="" # Odyssey API key
    ```
 
    Copy from the `.env.example` files in each app directory.

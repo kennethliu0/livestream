@@ -22,7 +22,7 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const odyssey = useOdyssey({
-    apiKey: import.meta.env.VITE_ODDYSEY_API_KEY,
+    apiKey: import.meta.env.VITE_ODYSSEY_API_KEY,
     handlers: {
       onConnected: (stream) => {
         console.log("Odyssey connected, got MediaStream");
