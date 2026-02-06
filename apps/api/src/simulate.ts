@@ -1,49 +1,19 @@
 import type { Server } from "socket.io";
 import type { Message } from "@repo/types";
 
-// Scene: replay of the last play
-const replayPrompts = [
-  "show the replay",
-  "play that again",
-  "I want to see the replay",
-  "run it back",
-  "show the last play again",
-  "replay that in slow motion",
-  "zoom in on the QB in the replay",
-  "show the replay from the end zone",
-  "one more time in slow mo",
-  "replay that catch",
+// 1. Opening: kickoff / coin toss / first drive
+const openingPrompts = [
+  "show the coin toss",
+  "I want to see the kickoff",
+  "show the opening kickoff",
+  "cut to the captains at midfield",
+  "show the kick return",
+  "give us the kickoff",
+  "show the first drive",
+  "I want the opening kick",
 ];
 
-// Scene: halftime stage and performer
-const halftimePrompts = [
-  "show the halftime performance",
-  "cut to the stage",
-  "I want to see the performer",
-  "show the halftime show",
-  "zoom in on the stage",
-  "show the main act",
-  "cut to the halftime stage",
-  "I want the halftime performance",
-  "show the performer on stage",
-  "give us the halftime show",
-];
-
-// Scene: trophy presentation and confetti celebration
-const celebrationPrompts = [
-  "show the trophy presentation",
-  "I want to see the confetti",
-  "show the MVP with the trophy",
-  "cut to the trophy ceremony",
-  "show the confetti and trophy",
-  "I want the trophy moment",
-  "show the Lombardi presentation",
-  "cut to confetti and celebration",
-  "show the winning team with the trophy",
-  "give us the trophy and confetti",
-];
-
-// Scene: end zone / goal line camera angle
+// 2. First half: in-game camera (drive / red zone)
 const endZoneCamPrompts = [
   "switch to the end zone cam",
   "show the end zone angle",
@@ -57,11 +27,36 @@ const endZoneCamPrompts = [
   "cut to end zone view",
 ];
 
+// 3. Halftime: stage and performer
+const halftimePrompts = [
+  "show the halftime performance",
+  "I want to see the performer",
+  "show the halftime show",
+  "cut to the halftime stage",
+  "I want the halftime performance",
+  "show the performer on stage",
+  "give us the halftime show",
+];
+
+// 4. Game over: trophy and celebration
+const celebrationPrompts = [
+  "show the trophy presentation",
+  "I want to see the confetti",
+  "show the MVP with the trophy",
+  "cut to the trophy ceremony",
+  "show the confetti and trophy",
+  "I want the trophy moment",
+  "cut to confetti and celebration",
+  "show the winning team with the trophy",
+  "give us the trophy and confetti",
+];
+
+// Order follows normal game flow: opening → 1st half → halftime → 2nd half → celebration
 const demoSequence = [
-  ...replayPrompts,
+  ...openingPrompts,
+  ...endZoneCamPrompts,
   ...halftimePrompts,
   ...celebrationPrompts,
-  ...endZoneCamPrompts,
 ];
 
 const usernames = [
@@ -79,7 +74,7 @@ function randomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
-const DEMO_INTERVAL_MS = 2000;
+const DEMO_INTERVAL_MS = 500;
 
 export function startSimulation(io: Server, messageBuffer: Message[]) {
   let sequenceIndex = 0;
