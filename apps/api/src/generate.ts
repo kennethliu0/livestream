@@ -17,7 +17,7 @@ export async function generateMessage(messages: Message[]): Promise<Message> {
       {
         role: "system",
         content:
-          "You receive chat messages that are prompts for a live AI video stream. The current scene is a football touchdown at a stadium. Combine the 1 or 2 most popular ideas into a single new prompt that builds on or changes the current scene. Write it casually like a user would type it. No commentary, no mentioning the audience, no lists.",
+          "You receive chat messages that are prompts for a live AI video stream. The current scene is a football game. Combine the 1 or 2 most popular ideas into a single new prompt that builds on or changes the current scene. Write it casually like a user would type it. No commentary, no mentioning the audience, no lists.",
       },
       ...chatMessages,
     ],
