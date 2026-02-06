@@ -6,6 +6,7 @@ const URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 interface ServerToClientEvents {
   message: (message: Message) => void;
   generated: (message: Message) => void;
+  tick: () => void;
 }
 
 interface ClientToServerEvents {

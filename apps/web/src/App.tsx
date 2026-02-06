@@ -46,27 +46,40 @@ function App() {
     },
   });
 
-  // Smooth countdown — drains over 5s, resets on generated or after 7s with no response
+  // Smooth countdown — synced to server tick
   useEffect(() => {
-    const DURATION = 5000;
-    const TIMEOUT = 7000;
+    const DURATION = 10000;
+    const onTick = () => {
+      lastGeneratedRef.current = Date.now();
+    };
+    socket.on("tick", onTick);
+
     const id = setInterval(() => {
       const elapsed = Date.now() - lastGeneratedRef.current;
-      if (elapsed >= TIMEOUT) {
-        lastGeneratedRef.current = Date.now();
-        setProgress(1);
-      } else {
-        setProgress(Math.max(0, 1 - elapsed / DURATION));
-      }
+      setProgress(Math.max(0, 1 - elapsed / DURATION));
     }, 50);
-    return () => clearInterval(id);
+
+    return () => {
+      socket.off("tick", onTick);
+      clearInterval(id);
+    };
   }, []);
 
-  // Connect to Odyssey on mount
+  // Connect to Odyssey on mount and start stream immediately
   useEffect(() => {
-    odyssey.connect().catch((err) => {
-      console.error("Odyssey connect failed:", err.message);
-    });
+    odyssey
+      .connect()
+      .then(() => {
+        streamStartedRef.current = true;
+        return odyssey.startStream({
+          prompt: "football touchdown at a stadium",
+          portrait: false,
+        });
+      })
+      .catch((err) => {
+        console.error("Odyssey connect/startStream failed:", err.message);
+        streamStartedRef.current = false;
+      });
   }, []);
 
   // Listen for chat messages
@@ -91,9 +104,6 @@ function App() {
   // Listen for generated events → drive Odyssey
   useEffect(() => {
     const handler = (message: Message) => {
-      // Reset countdown
-      lastGeneratedRef.current = Date.now();
-
       // Show generated prompt in chat
       setMessages((prev) => [
         ...prev,
@@ -106,19 +116,9 @@ function App() {
       ]);
 
       // Drive Odyssey stream
-      if (!streamStartedRef.current) {
-        streamStartedRef.current = true;
-        odyssey
-          .startStream({ prompt: message.content, portrait: false })
-          .catch((err) => {
-            console.error("Odyssey startStream failed:", err.message);
-            streamStartedRef.current = false;
-          });
-      } else {
-        odyssey.interact({ prompt: message.content }).catch((err) => {
-          console.error("Odyssey interact failed:", err.message);
-        });
-      }
+      odyssey.interact({ prompt: message.content }).catch((err) => {
+        console.error("Odyssey interact failed:", err.message);
+      });
     };
     onGenerated(handler);
     return () => {
@@ -156,7 +156,7 @@ function App() {
             style={{ width: `${progress * 100}%` }}
           />
           <span className="countdown-label">
-            Next summary in {Math.ceil(progress * 5)}s
+            Next summary in {Math.ceil(progress * 10)}s
           </span>
         </div>
         <div className="chat-messages">
