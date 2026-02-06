@@ -49,7 +49,7 @@ function App() {
 
   // Smooth countdown — synced to server tick
   useEffect(() => {
-    const DURATION = 10000;
+    const DURATION = 15000;
     const onTick = () => {
       lastGeneratedRef.current = Date.now();
     };
@@ -166,7 +166,7 @@ function App() {
             style={{ width: `${progress * 100}%` }}
           />
           <span className="countdown-label">
-            Next summary in {Math.ceil(progress * 10)}s
+            Next summary in {Math.ceil(progress * 15)}s
           </span>
         </div>
         <div className="chat-messages">

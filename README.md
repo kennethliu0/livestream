@@ -68,7 +68,7 @@ This is a [Turborepo](https://turbo.build/repo) monorepo with:
 
 - The video stream starts automatically on page load
 - Type messages in the chat panel on the right
-- Every 10 seconds, the server summarizes recent chat messages into a prompt
+- Every 15 seconds, the server summarizes recent chat messages into a prompt
 - The prompt is sent to Odyssey to update the video stream
 - A countdown bar above the chat shows time until the next summary
 - Generated prompts appear in chat as system messages (italic, with a purple left border)

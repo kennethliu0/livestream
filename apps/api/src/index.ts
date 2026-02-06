@@ -32,10 +32,8 @@ app.get("/health", (req: Request, res: Response) => {
 // In-memory message buffer
 const messageBuffer: Message[] = [];
 
-// Every 5 seconds, emit tick and process buffered messages
+// Every 15 seconds, emit tick and process buffered messages
 setInterval(async () => {
-  io.emit("tick");
-
   if (messageBuffer.length === 0) return;
 
   const messages = messageBuffer.splice(0);
@@ -43,11 +41,13 @@ setInterval(async () => {
   try {
     const generated = await generateMessage(messages);
     io.emit("generated", generated);
+    io.emit("tick");
     console.log("generated message:", generated);
   } catch (err) {
     console.error("Failed to generate message:", err);
+    io.emit("tick");
   }
-}, 10000);
+}, 15000);
 
 // Socket.io
 io.on("connection", (socket) => {
