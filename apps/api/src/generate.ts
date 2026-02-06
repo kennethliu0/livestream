@@ -3,7 +3,6 @@ import type { Message } from "@repo/types";
 
 const fireworks = new OpenAI({
   baseURL: "https://api.fireworks.ai/inference/v1",
-  apiKey: process.env.FIREWORKS_API_KEY,
 });
 
 export async function generateMessage(messages: Message[]): Promise<Message> {
