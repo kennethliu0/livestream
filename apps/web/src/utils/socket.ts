@@ -5,6 +5,7 @@ const URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
 interface ServerToClientEvents {
   message: (message: Message) => void;
+  generated: (message: Message) => void;
 }
 
 interface ClientToServerEvents {
@@ -26,6 +27,10 @@ export function sendMessage(content: string, origin: string): void {
 
 export function onMessage(callback: (message: Message) => void): void {
   socket.on("message", callback);
+}
+
+export function onGenerated(callback: (message: Message) => void): void {
+  socket.on("generated", callback);
 }
 
 if (import.meta.env.DEV) {
