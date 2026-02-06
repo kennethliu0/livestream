@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
 import type { Message } from "@repo/types";
+import { generateMessage } from "./generate";
 
 // Load environment variables from .env
 dotenv.config();
@@ -27,11 +28,30 @@ app.get("/health", (req: Request, res: Response) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+// In-memory message buffer
+let messageBuffer: Message[] = [];
+
+// Every 5 seconds, process buffered messages and broadcast the result
+setInterval(async () => {
+  if (messageBuffer.length === 0) return;
+
+  const messages = messageBuffer;
+  messageBuffer = [];
+
+  try {
+    const generated = await generateMessage(messages);
+    io.emit("generated", generated);
+  } catch (err) {
+    console.error("Failed to generate message:", err);
+  }
+}, 5000);
+
 // Socket.io
 io.on("connection", (socket) => {
   console.log("client connected:", socket.id);
 
   socket.on("message", (message: Message) => {
+    messageBuffer.push(message);
     io.emit("message", message);
   });
 
