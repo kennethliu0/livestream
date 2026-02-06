@@ -17,7 +17,7 @@ export async function generateMessage(messages: Message[]): Promise<Message> {
       {
         role: "system",
         content:
-          "You receive recent chat messages from a livestream. Summarize the intent of the audience under 15 words. Keep it simple—pick only the 1 or 2 strongest ideas, no extra clauses.",
+          "You receive chat messages that are prompts for video generation. Combine the 1 or 2 most popular ideas into a single new prompt in your own words. Write it casually like a user would type it. No commentary, no mentioning the audience, no lists.",
       },
       ...chatMessages,
     ],

@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import type { Message } from "@repo/types";
 import { generateMessage } from "./generate";
+import { startSimulation } from "./simulate";
 
 const app = express();
 const httpServer = createServer(app);
@@ -29,18 +30,18 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 // In-memory message buffer
-let messageBuffer: Message[] = [];
+const messageBuffer: Message[] = [];
 
 // Every 5 seconds, process buffered messages and broadcast the result
 setInterval(async () => {
   if (messageBuffer.length === 0) return;
 
-  const messages = messageBuffer;
-  messageBuffer = [];
+  const messages = messageBuffer.splice(0);
 
   try {
     const generated = await generateMessage(messages);
     io.emit("generated", generated);
+    console.log("generated message:", generated);
   } catch (err) {
     console.error("Failed to generate message:", err);
   }
@@ -62,4 +63,5 @@ io.on("connection", (socket) => {
 
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  startSimulation(io, messageBuffer);
 });
