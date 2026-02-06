@@ -13,18 +13,18 @@ const openingPrompts = [
   "I want the opening kick",
 ];
 
-// 2. First half: in-game camera (drive / red zone)
-const endZoneCamPrompts = [
-  "switch to the end zone cam",
-  "show the end zone angle",
-  "I want the goal line view",
-  "cut to the end zone camera",
-  "show the view from the end zone",
-  "give us the end zone cam",
-  "I want to see the end zone angle",
-  "switch to goal line cam",
-  "show the goal line camera",
-  "cut to end zone view",
+// 2. First half: touchdown
+const touchdownPrompts = [
+  "show the touchdown",
+  "I want to see the touchdown",
+  "show the TD run",
+  "cut to the end zone for the score",
+  "show the touchdown catch",
+  "give us the touchdown",
+  "I want the touchdown",
+  "show the QB sneak for the score",
+  "show the goal line touchdown",
+  "cut to the touchdown",
 ];
 
 // 3. Halftime: stage and performer
@@ -38,24 +38,39 @@ const halftimePrompts = [
   "give us the halftime show",
 ];
 
-// 4. Game over: trophy and celebration
+// 4. Second half: big tackle
+const tacklePrompts = [
+  "show the tackle",
+  "I want to see the hit",
+  "show the big tackle",
+  "cut to the sack",
+  "show the linebacker tackle",
+  "give us the tackle",
+  "I want the big hit",
+  "show the goal line stop",
+  "show the tackle in the backfield",
+  "cut to the tackle",
+];
+
+// 5. Game over: trophy and celebration
 const celebrationPrompts = [
-  "show the trophy presentation",
+  "show the trophy presentation with Drake Maye",
   "I want to see the confetti",
-  "show the MVP with the trophy",
-  "cut to the trophy ceremony",
+  "show the MVP with the trophy ",
+  "cut to the trophy ceremony with the Patriots",
   "show the confetti and trophy",
-  "I want the trophy moment",
-  "cut to confetti and celebration",
-  "show the winning team with the trophy",
+  "I want the trophy moment with",
+  "cut to confetti and celebration with with the Patriots",
+  "show the winning team with the trophy with Drake Maye",
   "give us the trophy and confetti",
 ];
 
-// Order follows normal game flow: opening → 1st half → halftime → 2nd half → celebration
+// Order follows normal game flow: opening → touchdown → halftime → tackle → celebration
 const demoSequence = [
   ...openingPrompts,
-  ...endZoneCamPrompts,
+  ...touchdownPrompts,
   ...halftimePrompts,
+  ...tacklePrompts,
   ...celebrationPrompts,
 ];
 
