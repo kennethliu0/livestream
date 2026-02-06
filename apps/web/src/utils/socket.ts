@@ -7,10 +7,13 @@ interface ServerToClientEvents {
   message: (message: Message) => void;
   generated: (message: Message) => void;
   tick: () => void;
+  "demo-status": (running: boolean) => void;
 }
 
 interface ClientToServerEvents {
   message: (message: Message) => void;
+  "start-demo": () => void;
+  "stop-demo": () => void;
 }
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(

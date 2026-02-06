@@ -163,3 +163,20 @@
 .chat-input button:hover {
   background: #1d4ed8;
 }
+
+.demo-btn {
+  background: #16a34a;
+  flex-shrink: 0;
+}
+
+.demo-btn:hover {
+  background: #15803d !important;
+}
+
+.demo-btn.running {
+  background: #dc2626;
+}
+
+.demo-btn.running:hover {
+  background: #b91c1c !important;
+}

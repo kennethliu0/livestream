@@ -76,10 +76,14 @@ function randomItem<T>(arr: T[]): T {
 
 const DEMO_INTERVAL_MS = 500;
 
+let demoInterval: ReturnType<typeof setInterval> | null = null;
+
 export function startSimulation(io: Server, messageBuffer: Message[]) {
+  if (demoInterval) return;
+
   let sequenceIndex = 0;
 
-  setInterval(() => {
+  demoInterval = setInterval(() => {
     const content = demoSequence[sequenceIndex % demoSequence.length]!;
     sequenceIndex += 1;
 
@@ -91,4 +95,15 @@ export function startSimulation(io: Server, messageBuffer: Message[]) {
     messageBuffer.push(message);
     io.emit("message", message);
   }, DEMO_INTERVAL_MS);
+}
+
+export function stopSimulation() {
+  if (demoInterval) {
+    clearInterval(demoInterval);
+    demoInterval = null;
+  }
+}
+
+export function isDemoRunning() {
+  return demoInterval !== null;
 }

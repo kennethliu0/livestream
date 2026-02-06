@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import type { Message } from "@repo/types";
 import { generateMessage } from "./generate";
-import { startSimulation } from "./simulate";
+import { startSimulation, stopSimulation, isDemoRunning } from "./simulate";
 
 const app = express();
 const httpServer = createServer(app);
@@ -58,6 +58,21 @@ io.on("connection", (socket) => {
     io.emit("message", message);
   });
 
+  socket.on("start-demo", () => {
+    console.log("demo started by:", socket.id);
+    startSimulation(io, messageBuffer);
+    io.emit("demo-status", true);
+  });
+
+  socket.on("stop-demo", () => {
+    console.log("demo stopped by:", socket.id);
+    stopSimulation();
+    io.emit("demo-status", false);
+  });
+
+  // Send current demo status to newly connected client
+  socket.emit("demo-status", isDemoRunning());
+
   socket.on("disconnect", () => {
     console.log("client disconnected:", socket.id);
   });
@@ -65,5 +80,4 @@ io.on("connection", (socket) => {
 
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  startSimulation(io, messageBuffer);
 });
